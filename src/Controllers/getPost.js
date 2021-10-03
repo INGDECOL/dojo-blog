@@ -5,6 +5,7 @@ const getPost = (id) =>{
     const error = ref(null)
     const load = async () =>{
         try {
+             
         let res = await fetch('http://localhost:3000/posts/' + id)
         if(!res.ok) {
             throw Error("That post doesn't exist")
