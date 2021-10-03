@@ -8,6 +8,7 @@
             #{{ tag}}
         </span>
     </div>
+    <div v-else>Problem showing this post</div>
 
 </template>
 <script>

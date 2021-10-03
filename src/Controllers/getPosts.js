@@ -5,7 +5,7 @@ const getPosts = () =>{
     const error = ref(null)
     const load = async () =>{
         try {
-           
+
         let res = await fetch('http://localhost:3000/posts')
         if(!res.ok) {
             throw Error("No Data available")

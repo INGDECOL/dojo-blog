@@ -1,8 +1,7 @@
 import { ref } from "vue";
-import {useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 const createPost = () =>{
-
-     const error = ref(null)
+    const error = ref(null)
     const router = useRouter()
     const create = async (post) =>{
         try {
@@ -14,7 +13,7 @@ const createPost = () =>{
             headers: {'content-Type' : 'application/json'},
             body : JSON.stringify(post)
         })
-        
+
         if(!res.ok) {
             throw Error("There is an error on submitting data to the server")
             return
