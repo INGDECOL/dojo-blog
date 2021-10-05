@@ -17,7 +17,7 @@ const routes = [
     props: true
   },
   {
-    path: '/posts/create/:token',
+    path: '/posts/create/:token/:id?',
     name: 'Create',
     component: Create,
     props: true

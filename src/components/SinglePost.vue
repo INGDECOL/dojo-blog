@@ -11,7 +11,6 @@
         </span>
     </div>
     <div v-else>Problem showing this post</div>
-
 </template>
 <script>
 import { computed } from 'vue'
@@ -19,7 +18,7 @@ import getToken from '../Controllers/getToken'
 export default {
     props:['post'],
     setup(props) {
-      
+
         const snipet = computed(() =>{
             return props.post.body.substring(0,80) + '....'
         })

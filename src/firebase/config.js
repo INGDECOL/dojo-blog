@@ -1,5 +1,5 @@
-import firebase from 'firebase/app'
-import 'firebase/firestore'
+import { initializeApp } from 'firebase/app'
+import { getFirestore } from 'firebase/firestore'
 const firebaseConfig = {
     apiKey: "AIzaSyCA51NciwmD6nhtFF6TEXXd1EVLeRR-30w",
     authDomain: "udemy-vue-firebase-site-208bc.firebaseapp.com",
@@ -9,8 +9,7 @@ const firebaseConfig = {
     appId: "1:919946386218:web:9a2a0148468f0d0bcbdc53"
 };
 // init firebase
-firebase.initializeApp(firebaseConfig)
-
+const firebase = initializeApp(firebaseConfig)
 //init firestore
-const firestoreProject = firebase.firestore()
-export { firestoreProject }
+const db = getFirestore(firebase)
+export  { db }

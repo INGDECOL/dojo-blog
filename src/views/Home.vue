@@ -10,7 +10,6 @@
       </div>
     <div v-else>
       <Spinner />
-      Loading please wait ...
     </div>
 
   </div>
@@ -34,6 +33,7 @@ export default {
     const { posts, error, load } = getPosts()
     load()
     const { token } = getToken()
+    
     // loadToken()
     console.log("Token : " + token.value)
     return { posts, error, token}

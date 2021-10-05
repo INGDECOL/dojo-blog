@@ -12,22 +12,62 @@
                 type="text"
                 @keydown.enter.prevent="handleKeydown">
                 <div class="pill" v-for="tag in tags" :key="tag">#{{ tag }}</div>
-            <button>Add Post</button>
+            <button>{{ id ? 'Edit Post' : 'AddPost'}}</button>
         </form>
     </div>
 </template>
 
 <script>
-import { ref } from '@vue/reactivity'
+import { computed, ref } from '@vue/reactivity'
 import createPost from '../Controllers/createPost'
+import { doc, getDoc, serverTimestamp } from 'firebase/firestore'
+import { useRoute } from 'vue-router'
+import getPost from '../Controllers/getPost'
+import { db } from '../firebase/config'
+import { onMounted } from '@vue/runtime-core'
 export default {
     props: ['token'],
+
     setup() {
+      const id = ref(null)
+      const p = ref({})
         const title = ref('')
         const body = ref('')
         const tags = ref([])
         const tag = ref('')
+        const route = useRoute()
 
+        const f = onMounted( async () =>{
+          console.log(" onMounted ")
+          if(route.params.id){
+            console.log("route")
+            const { post, error, load } = getPost(route.params.id)
+            load()
+            const docRef = doc( db, 'posts', route.params.id)
+            const res =   await getDoc(docRef)
+            console.log(" post res :", res.data().title)
+            id.value = res.id
+            title.value = res.data().title
+            body.value = res.data().body
+            tags.value = [...res.data().tags]
+            console.log(" id : ", id.value)
+          }
+        })
+
+        if(route.params.id ){
+
+          //console.log("ppppppppp : ", post.value.title)
+          async () =>{
+            const docRef = doc( db, 'posts', route.params.id)
+            const res =   await getDoc(docRef)
+            console.log("res : ", res)
+            p.value = {...res.data(), id: id}
+          }
+
+
+
+          console.log("create :")
+        }
         const handleKeydown = () =>{
             if( !tags.value.includes(tag.value)){
                 tag.value = tag.value.replace(/\s/, '') //remove all whiteSpaces
@@ -35,13 +75,29 @@ export default {
             }
             tag.value = ''
         }
-        const { error, create} = createPost()
+        const { error, create, update } = createPost()
         const handleSubmit = () =>{
-            let post = { title: title.value, body: body.value, tags: tags.value}
+          if(id.value) {
+            let p = {
+              id: id.value,
+              title: title.value,
+              body: body.value,
+              tags: tags.value
+            }
+            update(p)
+          } else {
+            console.log(" Not id")
+            let post = {
+              title: title.value,
+              body: body.value,
+              tags: tags.value,
+              createdAt: serverTimestamp()
+            }
             create(post)
+          }
         }
 
-        return { title,body, tag, handleKeydown, tags, handleSubmit, error }
+        return { title,body, tag, handleKeydown, tags, handleSubmit, error, id }
     }
 }
 </script>
@@ -90,7 +146,18 @@ export default {
     color: white;
     border: none;
     padding: 8px 16px;
-    font-size: 18px
+    font-size: 18px;
+    cursor: pointer;
+  }
+  button.edit {
+    /* display: block;
+    margin-top: 30px; */
+    background: #12743b;
+    /* color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 18px;
+    cursor: pointer; */
   }
   .pill {
     display: inline-block;
